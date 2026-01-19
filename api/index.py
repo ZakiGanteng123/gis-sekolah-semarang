@@ -353,6 +353,20 @@ def get_multi_routes():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
+@app.route('/api/test-db')
+def test_db():
+    try:
+        db_url = os.environ.get("DATABASE_URL")
+        if not db_url:
+            return jsonify({"status": "error", "message": "DATABASE_URL tidak ditemukan di Environment Variables"}), 500
+            
+        conn = psycopg2.connect(db_url)
+        cur = conn.cursor()
+        cur.execute("SELECT 1")
+        return jsonify({"status": "success", "message": "Koneksi Database Berhasil!", "url_preview": db_url[:15] + "..."})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 if __name__ == '__main__':
 
     app.run(debug=True, port=5001)
+
