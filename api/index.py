@@ -38,7 +38,7 @@ def haversine(lon1, lat1, lon2, lat2):
 print("Memuat graf jalan dari database...")
 G = nx.Graph()
 try:
-    conn = psycopg2.connect(DATABASE_URL)
+    conn = get_db_connection()
     cur = conn.cursor()
 
     # Query yang sudah diperbaiki untuk menghitung panjang dalam meter
@@ -354,4 +354,5 @@ def get_multi_routes():
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
 if __name__ == '__main__':
+
     app.run(debug=True, port=5001)
